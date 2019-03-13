@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title> Furniture </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+  <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+  <style>
+	nav {
+		border: 2px dotted dashed solid double;
+	}
+    body {
+      font-family: "Lato", italic;
+	  border:20px solid hsl(0, 100%, 50%);
+	  background-image:url(https://previews.123rf.com/images/ingalinder/ingalinder1307/ingalinder130700007/21172338-seamless-vector-pattern-with-cute-pastel-baby-blue-polka-dots-on-white-background-for-web-design-des.jpg);
+    }
+
+    .sidenav {
+      height: 66%;
+      width: 300px;
+      position: fixed;
+      z-index: 1;
+      top: 50px;
+      left: 0;
+      background-color: #708090;
+      overflow-x: hidden;
+      padding-top: 20px;
+	  margin-bottom:80px;
+	  margin-right:20px;
+	  margin-left:20px;
+	  margin-top:50px;
+	 
+	  
+    }
+
+    .sidenav a {
+      padding: 6px 6px 6px 32px;
+      text-decoration: none;
+      font-size: 18px;
+      color: HotPink;
+      display: block;
+	  margin-top:20px;
+	  background-image:url("https://i.pinimg.com/236x/13/c0/d4/13c0d42b0abefc046ac5bc0ccae68c2d--background-pictures.jpg?b=t");
+	  
+	  
+    }
+
+    .sidenav a:hover {
+      color: #FFFF00;
+	  font-size:25px;
+	  background-image:url("https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/BXtBfsgwgiy703sa5/videoblocks-red-background-with-stripes-stars-and-light-pulse_rpmzsumyol_thumbnail-full04.png");
+	  
+    }
+	
+
+    .main {
+      margin-left: 300px; /* Same as the width of the sidenav */
+		
+    }
+
+    @media screen and (max-height: 450px) {
+      .sidenav {padding-top: 15px;}
+      .sidenav a {font-size: 18px;}
+    }
+  </style>
+  {% block head %}{% endblock head %}
+</head>
+<body>
+{% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <script>
+            var messages = {{ messages | safe }};
+            for (var i=0; i<messages.length; i++) {
+              alert(messages[i]);
+            }
+          </script>
+        {% endif %}
+{% endwith %}
+<nav class="navbar navbar-inverse  navbar-fixed-top" style="background-color:#D8BFD8;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{{ url_for('home') }}" style="color:hsl(39, 100%, 50%);font-size:30px;font-family:cooper black">Furniture</a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      {% if 'username' in session %}
+            <li><button class="btn btn-warning mr-sm-2" style="margin-top: 5px;background-color:#FDF5E6;font-size:20px;"><a href="{{ url_for('addFurnitureCompany')}}" style="color:black;font-style:italic">Add Furniture Category</a></button></li>
+            <li style="margin: 10px;"><p class="text-primary mr-sm-2" style="color:black;font-size:25px;font-style:italic">{{ session.username }}</p></li>
+			
+            <li><a href="{{ url_for('logout')}}" style="color:hsl(39, 100%, 50%);font-size:20px;border-radius:20px;"><span class="glyphicon glyphicon-log-in"></span> LOGOUT</a></li>
+      {% else %}
+            <li><a href="{{ url_for('showLogin')}}" style="color:hsl(39, 100%, 50%);font-size:20px;border-radius:20px;" class="login"><span class="glyphicon glyphicon-log-in"></span> LOGIN</a></li>
+      {% endif %}
+      
+    </ul>
+  </div>
+</nav>
+  
+<div class="sidenav">
+  <table>
+      {% for nh in vhs %}
+      <tr>
+          <td><a href="{{ url_for('showFurnitures',gptid=nh.id)}}">{{nh.name}}</a></td>
+          {% if 'username' in session %}
+            <td><a href = "{{ url_for('editFurnitureCategory',gptid=nh.id)}}">
+            <span class="glyphicon glyphicon-pencil pull-right " data-toggle="tooltip" title="Edit Category" data-placement="bottom"> </span> </a></td>
+            <td><a href = "{{ url_for('deleteFurnitureCategory',gptid=nh.id)}}">
+            <span class="glyphicon glyphicon-trash pull-right" data-toggle="tooltip" title="Delete Category" data-placement="top"> </span> </a></td>  
+          {% endif %}   
+        </tr>              
+      {% endfor %}
+  </table>
+</div>
+<div class="container">
+
+      <div class="main" style="margin-top: 100px;">
+        
+            {% block content %}
+              
+            {% endblock content %}
+          
+        </div>
+  </div>
+  
+</body>
+</html>
